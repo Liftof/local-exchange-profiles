@@ -1,0 +1,15 @@
+{
+  "cache_sha256": "ceb308448dde48c205fa7ca9c8a1c9a2c382b84da993d09d1fe5dc7bf055dca1",
+  "core_candidates": 392,
+  "core_compatible_edges": 11054,
+  "elapsed_seconds": 27.48856712412089,
+  "eligible_candidates": 1324,
+  "geometry_incompatible_triples": 188,
+  "minimum_core_degree": 5,
+  "one_outsider_clauses": 2932,
+  "removal_incompatible_triples": 200608,
+  "status": "VERIFIED",
+  "triangles_tested": 211856,
+  "triple_incompatibilities": 200796,
+  "two_outsider_forced_entries": 13844
+}

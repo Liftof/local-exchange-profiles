@@ -1,0 +1,13 @@
+{
+  "format": "radius9-individual-unlock-witness-v1",
+  "n": 100,
+  "record_size": 164,
+  "radius_removed": 9,
+  "removal_indices": [10, 11, 18, 32, 109, 117, 137, 139, 140],
+  "removals": [[92, 51], [96, 97], [3, 97], [7, 51], [26, 40], [7, 84], [73, 40], [22, 95], [77, 95]],
+  "individually_unlocked": [[4, 98], [10, 56], [22, 99], [75, 81], [77, 99], [89, 56], [95, 98]],
+  "individual_unlock_lower_bound": 7,
+  "best_joint_subset_within_list": [[4, 98], [10, 56], [22, 99], [75, 81], [89, 56], [95, 98]],
+  "best_joint_subset_size_within_list": 6,
+  "provenance": "deterministic-seed radius-nine removal-mask heuristic; every stated property is rechecked by radius9_verify_u7.py"
+}

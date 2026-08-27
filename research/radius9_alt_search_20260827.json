@@ -1,0 +1,132 @@
+{
+  "format": "radius9-independent-heuristic-search-v1",
+  "date_utc": "2026-08-27",
+  "instance": {
+    "grid_n": 100,
+    "record_size": 164,
+    "radius_removed": 9,
+    "target_added": 10,
+    "record_sha256": "c613fd9f0b71f055e5c1a51a82cb1c7dbf87d8834875bc299557e63110bf5801",
+    "rpc1_sha256": "bf3f9cd7f8fa443e45904ec500093b95a36dbfac0d09d15872e98ca7e778c8e2",
+    "pair_cache_sha256": "8c09656afe062fff4a24e293cbbb01a70c488bae6893bb057c7dc7996cfb52bd"
+  },
+  "preprocessing": {
+    "eligible_candidates": 2932,
+    "minimal_covers": 383184,
+    "forced_pair_entries": 694252,
+    "candidate_pairs_tested": 4296846,
+    "compatible_pairs": 95724,
+    "incompatible_pairs": 4201122,
+    "nine_core_vertices": 1388,
+    "nine_core_edges": 92160
+  },
+  "heuristic_outcome": {
+    "status": "NOT_FOUND",
+    "exact": false,
+    "meaning": "No 9-to-10 witness occurred in the sampled removal masks; this is not an impossibility result.",
+    "total_masks_evaluated": 8446705,
+    "best_individually_unlocked": 7,
+    "best_simultaneously_compatible": 6,
+    "runs": [
+      {
+        "algorithm": "hybrid additions-first plus exact-repair removal-mask LNS",
+        "seed": 2026082701,
+        "elapsed_seconds": 300.615,
+        "iterations": 2308364,
+        "masks_evaluated": 2308935,
+        "repair_calls": 2292687,
+        "repair_nodes": 11284521,
+        "best_individually_unlocked": 7,
+        "best_simultaneously_compatible": 6,
+        "log_sha256": "6a674c9246766eacb5dcc32279d2b34c59759ec611a252d44de6ff53691e413a"
+      },
+      {
+        "algorithm": "hybrid additions-first plus exact-repair removal-mask LNS",
+        "seed": 2026082702,
+        "elapsed_seconds": 300.741,
+        "iterations": 3240067,
+        "masks_evaluated": 3240877,
+        "repair_calls": 2975532,
+        "repair_nodes": 10349899,
+        "best_individually_unlocked": 7,
+        "best_simultaneously_compatible": 6,
+        "log_sha256": "a6e36fbd0e3e61c71f041ed810e65e67da63876c5e76b6d5338ed6432b046ea2"
+      },
+      {
+        "algorithm": "individual-unlock targeted cover LNS with exact repair on improvements",
+        "seed": 2026082703,
+        "elapsed_seconds": 240.0,
+        "iterations": 2896741,
+        "masks_evaluated": 2896893,
+        "restarts": 145,
+        "best_individually_unlocked": 7,
+        "best_simultaneously_compatible": 6,
+        "log_sha256": "2d01cb36d7034440904c9b0ded7500877509e52538695f7f182d713726eee5b6"
+      }
+    ]
+  },
+  "representative_verified_mask": {
+    "removal_indices": [10, 11, 18, 32, 109, 117, 137, 139, 140],
+    "removed_points": [[92, 51], [96, 97], [3, 97], [7, 51], [26, 40], [7, 84], [73, 40], [22, 95], [77, 95]],
+    "individually_unlocked": [[4, 98], [10, 56], [22, 99], [75, 81], [77, 99], [89, 56], [95, 98]],
+    "pair_conflict_count": 0,
+    "outsider_isosceles_triples": [[[4, 98], [75, 81], [77, 99]]],
+    "maximum_simultaneous_additions": 6,
+    "verified_additions": [[95, 98], [4, 98], [10, 56], [89, 56], [22, 99], [75, 81]],
+    "final_size": 161,
+    "direct_integer_geometry_check": "VALID",
+    "checker": "research/audit/radius9_mask_direct_check.py",
+    "checker_sha256": "40239d5cd8ce18fa223f61844fdb28b88913c4c213b068e32ef3c96b100d5145"
+  },
+  "repeated_plateau_diagnostic": [
+    {
+      "ninth_removal_index": 117,
+      "individually_unlocked": 7,
+      "pair_conflicts": 0,
+      "outsider_triple_conflicts": 1,
+      "maximum_simultaneous_additions": 6
+    },
+    {
+      "ninth_removal_index": 30,
+      "individually_unlocked": 7,
+      "pair_conflicts": 0,
+      "outsider_triple_conflicts": 1,
+      "maximum_simultaneous_additions": 6
+    },
+    {
+      "ninth_removal_index": 64,
+      "individually_unlocked": 7,
+      "pair_conflicts": 0,
+      "outsider_triple_conflicts": 1,
+      "maximum_simultaneous_additions": 6
+    }
+  ],
+  "exact_searches": [
+    {
+      "target_added": 7,
+      "status": "UNKNOWN",
+      "elapsed_seconds": 200.048,
+      "nodes": 104876,
+      "family_extensions": 34635776,
+      "cover_union_tests": 31193418099,
+      "result": "research/radius9_alt_exact_probe_k7.json",
+      "result_sha256": "8b6dc66c1c5c190e5274aaec359a8864f2743c3058913ebd75e9e1fd7a7c3de2"
+    },
+    {
+      "target_added": 10,
+      "status": "UNKNOWN",
+      "elapsed_seconds": 580.099,
+      "nodes": 233472,
+      "family_extensions": 77012633,
+      "cover_union_tests": 91148661627,
+      "result": "research/radius9_cpp_n100_r9_k10.json",
+      "result_sha256": "26edaed143ff2f3426ae5a92f87c766b5cb7aae92044b84aa20c85b92e5a0bf8"
+    }
+  ],
+  "verdict": {
+    "record_165_found": false,
+    "radius9_target10_status": "UNKNOWN",
+    "unsat_claim": false,
+    "structural_utility": "The best recurrent radius-nine masks support seven outsiders pairwise, but one all-outsider isosceles triple reduces the exact simultaneous maximum on each inspected mask to six. This identifies ternary geometry, not pair compatibility, as the local obstruction at the observed plateau."
+  }
+}

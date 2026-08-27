@@ -1,0 +1,14 @@
+n=100
+record_size=164
+radius_removed=7
+target_added=6
+eligible_candidates=1324
+compatible_pairs=11942
+status=UNSAT
+nodes=15227
+family_extensions=1013058
+masks_generated=475262
+pruned_cardinality=24193
+pruned_removals=988858
+pruned_outside_triples=0
+elapsed_seconds=47.762305

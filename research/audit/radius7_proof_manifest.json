@@ -1,0 +1,111 @@
+{
+  "schema": "radius7-exchange-proof-manifest-v1",
+  "created_utc": "2026-08-27T18:56:57Z",
+  "theorem": "For the public 164-point configuration S, exactly seven record removals permit at most five simultaneous outside additions.",
+  "exact_value": {
+    "notation": "e_S(7)",
+    "value": 5,
+    "lower_bound_witness": {
+      "removals": [[92, 51], [96, 97], [7, 51], [8, 93], [26, 40], [73, 40], [77, 95]],
+      "additions": [[95, 98], [89, 56], [75, 81], [10, 56], [77, 99]],
+      "final_size": 162,
+      "source": "research/radius7_dfs_n100_r7_k5.txt",
+      "source_bytes": 462,
+      "source_sha256": "2916f41b98b46bc4a9640e7bd21490aeae73efc8aefdf4a7f86a37f1f5534eff",
+      "independent_geometry_verification": true,
+      "checker": "research/audit/verify_radius7_witness.py",
+      "checker_result": "radius7_lower_bound_witness_verified=true removals=7 additions=5 final_size=162"
+    }
+  },
+  "relaxed_dfs_cross_check": {
+    "method": "Replace the all-outsider isosceles predicate by the constant false function; all one-outsider covers and two-outsider forced removals remain active.",
+    "target_6": {
+      "path": "research/audit/radius7_dfs_k6_no_outsider_triples.txt",
+      "sha256": "06e3140e7e87b38bc831b3e7ed64043ebde0f5e293eed38fa44dd31a6b7596d1",
+      "status": "UNSAT",
+      "nodes": 15239,
+      "elapsed_seconds": 43.960801
+    },
+    "target_8": {
+      "path": "research/audit/radius7_dfs_no_outsider_triples.txt",
+      "sha256": "47065faccf1713876b569c3cd2685139edddefdfc8575f417c29ea357a070997",
+      "status": "UNSAT",
+      "nodes": 14232,
+      "elapsed_seconds": 41.753014
+    }
+  },
+  "independent_preprocessing_audit": {
+    "pair_cache_sha256": "ceb308448dde48c205fa7ca9c8a1c9a2c382b84da993d09d1fe5dc7bf055dca1",
+    "eligible_candidates": 1324,
+    "minimal_covers": 55528,
+    "pairs_tested": 875826,
+    "compatible_pairs": 11942,
+    "forced_pair_masks_nonempty": 138156,
+    "forced_record_entries": 167364,
+    "core_minimum_degree": 5,
+    "core_candidates": 392,
+    "core_compatible_edges": 11054,
+    "core_triangles_tested": 211856,
+    "triple_incompatibilities": 200796,
+    "geometry_incompatible_triples": 188,
+    "removal_incompatible_triples": 200608
+  },
+  "cnf": {
+    "path": "research/audit/radius7_core_r7_k6_nosym.cnf",
+    "bytes": 4855298,
+    "sha256": "2461ee72b797a636de8154422544c2c3673e43d9c83e069f41a1c434eef26bba",
+    "variables": 7386,
+    "clauses": 308590,
+    "radius_removed": 7,
+    "target_added": 6,
+    "symmetry_break": false,
+    "one_outsider_clauses": 2932,
+    "two_outsider_clauses": 13844,
+    "three_outsider_geometry_clauses": 11776,
+    "pair_incompatibility_clauses": 65582,
+    "triple_incompatibility_clauses": 200796
+  },
+  "proof_generation": {
+    "solver": "CaDiCaL 1.9.5",
+    "solver_commit": "146207318796f094dcded87349a64f0c6927309e",
+    "solver_binary_sha256": "4f477982197aa85e3e0e1b0007204e254e7a27bee90b6c892b57421f70268969",
+    "command": "ulimit -f 819200; timeout 180s research/audit/tools/cadical/build/cadical --quiet --unsat research/audit/radius7_core_r7_k6_nosym.cnf research/audit/radius7_core_r7_k6_nosym.drat",
+    "stdout_status": "s UNSATISFIABLE",
+    "exit_code": 20,
+    "elapsed_wall_seconds_approx": 20.6,
+    "proof_path": "research/audit/radius7_core_r7_k6_nosym.drat",
+    "proof_format": "binary DRAT",
+    "proof_bytes": 25282853,
+    "proof_sha256": "6a845c1af080a63661599f9633910b170293502c9319688cf55829ca1ba37c3b"
+  },
+  "proof_verification": {
+    "checker": "drat-trim",
+    "checker_commit": "2e3b2dc0ecf938addbd779d42877b6ed69d9a985",
+    "checker_binary_sha256": "37a57f75acffbd40b850229ea9f092ed02f674e97a0c4d645056d4b6fcd23fef",
+    "command": "timeout 300s research/audit/tools/drat-trim/drat-trim research/audit/radius7_core_r7_k6_nosym.cnf research/audit/radius7_core_r7_k6_nosym.drat",
+    "success_line": "s VERIFIED",
+    "exit_code": 0,
+    "verification_seconds": 26.669,
+    "input_core_clauses": 252110,
+    "input_clauses": 308590,
+    "core_lemmas": 106745,
+    "total_lemmas": 427108,
+    "resolution_steps": 22191309,
+    "rat_lemmas_in_core": 0,
+    "redundant_literals_in_core_lemmas": 57610
+  },
+  "consequence": {
+    "minimum_record_removals_for_a_165_point_improvement": 8,
+    "minimum_symmetric_difference_for_a_165_point_improvement": 17
+  },
+  "reproduction": {
+    "radius_7_command": "research/audit/verify_radius7_certificate.sh",
+    "radius_6_and_7_command": "research/audit/verify_all_certificates.sh",
+    "lrat_conversion_performed": false
+  },
+  "source_provenance": {
+    "alphaevolve_repository_commit": "8f447457957deac61e28bf1676746f0753b3b2f8",
+    "notebook_sha256": "653accd24369672f1cc757b203dae311f1489895a1cb8e6242d3308fe657891d",
+    "canonical_record_sha256": "ffe9583db47dbcc7e29e12a7d148fb1388827ac9917d1aefa7eb5fee89b4e7d6"
+  }
+}

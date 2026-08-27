@@ -1,0 +1,1 @@
+status=VERIFIED antichain_trials=5000 coloring_graphs=1400 max_vertices=14

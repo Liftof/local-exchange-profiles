@@ -1,0 +1,62 @@
+{
+  "format": "radius8-cpp-independent-witness-verification-v1",
+  "result": "research/radius8_cpp_validation_r7_k5.json",
+  "result_sha256": "6294dcffd7aa49cf94bce75d94323c56451cd779402eea5e063d8c978f8ac8d2",
+  "record_sha256": "c613fd9f0b71f055e5c1a51a82cb1c7dbf87d8834875bc299557e63110bf5801",
+  "radius_removed": 7,
+  "target_added": 5,
+  "final_size": 162,
+  "direct_cubic_integer_geometry_verified": true,
+  "removals": [
+    [
+      92,
+      51
+    ],
+    [
+      96,
+      97
+    ],
+    [
+      7,
+      51
+    ],
+    [
+      8,
+      93
+    ],
+    [
+      26,
+      40
+    ],
+    [
+      73,
+      40
+    ],
+    [
+      77,
+      95
+    ]
+  ],
+  "additions": [
+    [
+      95,
+      98
+    ],
+    [
+      89,
+      56
+    ],
+    [
+      75,
+      81
+    ],
+    [
+      10,
+      56
+    ],
+    [
+      77,
+      99
+    ]
+  ]
+}

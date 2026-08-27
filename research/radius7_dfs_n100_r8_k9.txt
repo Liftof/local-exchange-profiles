@@ -1,0 +1,14 @@
+n=100
+record_size=164
+radius_removed=8
+target_added=9
+eligible_candidates=2036
+compatible_pairs=35950
+status=UNKNOWN
+nodes=24576
+family_extensions=4200088
+masks_generated=524852
+pruned_cardinality=29644
+pruned_removals=4170441
+pruned_outside_triples=0
+elapsed_seconds=309.973281

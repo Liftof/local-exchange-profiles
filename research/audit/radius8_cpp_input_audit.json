@@ -1,0 +1,17 @@
+{
+  "binary": "research/radius7_pair_input_n100_r8.bin",
+  "binary_sha256": "31d4606f6f878ce6ddf4fc9cb48fbaeecd4380b11b478c456ec5ea2e040f295e",
+  "cache": "research/radius7_paircompat_n100_r8.json",
+  "cache_sha256": "30e257b34af3a05a193023e3005fd46a933794fcd4ce429812b540724fe784d7",
+  "compatible_pairs": 35950,
+  "elapsed_seconds": 273.217053337954,
+  "eligible_candidates": 2036,
+  "forced_pair_masks_nonempty": 331300,
+  "forced_record_entries": 397808,
+  "minimal_covers": 150848,
+  "pairs_tested": 2071630,
+  "radius": 8,
+  "record_size": 164,
+  "status": "VERIFIED",
+  "workers": 6
+}

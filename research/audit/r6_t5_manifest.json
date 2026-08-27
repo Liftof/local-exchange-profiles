@@ -1,0 +1,24 @@
+{
+  "candidates_with_covers": 692,
+  "cnf_clauses": 345619,
+  "cnf_variables": 60297,
+  "conflict_edges": 154440,
+  "maximum_edges_per_candidate": 45,
+  "minimal_covers": 16048,
+  "minimal_covers_by_size": {
+    "2": 24,
+    "3": 212,
+    "4": 656,
+    "5": 2932,
+    "6": 12224
+  },
+  "minimum_edges_per_candidate": 3,
+  "notebook": "alphaevolve_repository_of_problems/experiments/subsets_of_the_grid_with_no_isosceles_triangles/subsets_of_the_grid_with_no_isosceles_triangles.ipynb",
+  "notebook_sha256": "653accd24369672f1cc757b203dae311f1489895a1cb8e6242d3308fe657891d",
+  "outside_candidates": 9836,
+  "radius": 6,
+  "record_sha256": "ffe9583db47dbcc7e29e12a7d148fb1388827ac9917d1aefa7eb5fee89b4e7d6",
+  "record_size": 164,
+  "record_valid": true,
+  "target": 5
+}

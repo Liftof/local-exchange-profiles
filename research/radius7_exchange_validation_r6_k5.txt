@@ -1,0 +1,17 @@
+n=100
+record_size=164
+radius_removed=6
+target_added=5
+eligible_outside_candidates=692
+minimal_covers=16048
+one_outsider_clauses=5912
+two_outsider_clauses=44580
+three_outsider_clauses=67332
+symmetry_break=True
+variables=10117
+clauses=138311
+solver=glucose42
+status=UNSAT
+build_seconds=3.421339
+solve_seconds=225.023000
+stats={'restarts': 4068, 'conflicts': 815373, 'decisions': 4056573, 'propagations': 677422733}

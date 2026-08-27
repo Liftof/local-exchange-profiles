@@ -1,0 +1,21 @@
+{
+  "candidate_prefilter": false,
+  "cnf": "research/audit/r6_t5_matching.cnf",
+  "cnf_clauses": 24775,
+  "cnf_sha256": "f72229bacc773b19bf78209134cc666496854e60d1a515b4809ae2deeca23651",
+  "cnf_variables": 5703,
+  "conflict_edges": 154440,
+  "encoded_candidate_count": 737,
+  "matching_exclusion_witnesses": 9099,
+  "matching_prefilter": true,
+  "maximum_edges_per_candidate": 45,
+  "minimum_edges_per_candidate": 3,
+  "notebook": "alphaevolve_repository_of_problems/experiments/subsets_of_the_grid_with_no_isosceles_triangles/subsets_of_the_grid_with_no_isosceles_triangles.ipynb",
+  "notebook_sha256": "653accd24369672f1cc757b203dae311f1489895a1cb8e6242d3308fe657891d",
+  "outside_candidates": 9836,
+  "radius": 6,
+  "record_sha256": "ffe9583db47dbcc7e29e12a7d148fb1388827ac9917d1aefa7eb5fee89b4e7d6",
+  "record_size": 164,
+  "record_valid": true,
+  "target": 5
+}

@@ -1,0 +1,73 @@
+{
+  "schema": "local-resilience-proof-manifest-v1",
+  "created_utc": "2026-08-27T18:31:41Z",
+  "claim": "No set of exactly six record-point removals individually unlocks five outside grid points.",
+  "instance": {
+    "path": "research/audit/r6_t5_matching.cnf",
+    "bytes": 381497,
+    "sha256": "f72229bacc773b19bf78209134cc666496854e60d1a515b4809ae2deeca23651",
+    "variables": 5703,
+    "clauses": 24775,
+    "radius": 6,
+    "target_unlocked": 5,
+    "encoded_candidates": 737
+  },
+  "matching_exclusion_certificate": {
+    "path": "research/audit/r6_matching_witnesses.json",
+    "bytes": 1050465,
+    "sha256": "00a13903ed420b54ea19f1ea8aa52ece4b69eff478637b79dc70f0943e70b522",
+    "excluded_candidates": 9099,
+    "matching_size_per_candidate": 7,
+    "checker": "research/audit/verify_matching_certificate.py",
+    "checker_result": "verified=true matching_witnesses=9099 remaining_candidates=737 matching_size=7"
+  },
+  "proof_generation": {
+    "solver": "CaDiCaL 1.9.5",
+    "solver_commit": "146207318796f094dcded87349a64f0c6927309e",
+    "command": "ulimit -f 921600; timeout 300s research/audit/tools/cadical/build/cadical --quiet --unsat research/audit/r6_t5_matching.cnf research/audit/r6_t5_matching.drat",
+    "stdout_status": "s UNSATISFIABLE",
+    "exit_code": 20,
+    "elapsed_seconds_approx": 165,
+    "proof_path": "research/audit/r6_t5_matching.drat",
+    "proof_format": "binary DRAT",
+    "proof_bytes": 291778586,
+    "proof_sha256": "149d3592fe5a2d6afccc05905b45ddc638947d537df6bc99865b9d190b20be9a"
+  },
+  "proof_verification": {
+    "checker": "drat-trim",
+    "checker_commit": "2e3b2dc0ecf938addbd779d42877b6ed69d9a985",
+    "build_note": "gcc -D_GNU_SOURCE drat-trim.c -std=c99 -O2 -o drat-trim",
+    "command": "timeout 300s research/audit/tools/drat-trim/drat-trim research/audit/r6_t5_matching.cnf research/audit/r6_t5_matching.drat",
+    "success_line": "s VERIFIED",
+    "exit_code": 0,
+    "verification_seconds": 228.846,
+    "input_core_clauses": 20177,
+    "input_clauses": 24775,
+    "core_lemmas": 464404,
+    "total_lemmas": 1002419,
+    "resolution_steps": 275153070,
+    "rat_lemmas_in_core": 0,
+    "redundant_literals_in_core_lemmas": 834501
+  },
+  "formal_lrat_status": {
+    "status": "not generated on this host",
+    "reason": "275153070 resolution hints project a binary LRAT near or above 0.8 GB; conversion was intentionally skipped with only 1.7 GB free disk.",
+    "verified_checker_ready": true,
+    "verified_checker": "cake_lpr",
+    "verified_checker_commit": "a36874a8b750b43fe4b385b8ddbf5b033e46a3fa",
+    "smoke_test_result": "s VERIFIED UNSAT"
+  },
+  "source_provenance": {
+    "alphaevolve_repository_commit": "8f447457957deac61e28bf1676746f0753b3b2f8",
+    "notebook_sha256": "653accd24369672f1cc757b203dae311f1489895a1cb8e6242d3308fe657891d",
+    "canonical_record_sha256": "ffe9583db47dbcc7e29e12a7d148fb1388827ac9917d1aefa7eb5fee89b4e7d6"
+  },
+  "environment": {
+    "kernel": "Linux 7.0.0-27-generic x86_64",
+    "gcc": "15.2.0",
+    "g++": "15.2.0",
+    "system_python": "3.14.4",
+    "research_venv_python": "3.12.12",
+    "python_sat": "1.9.dev15"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "radius8-exchange-witness-manifest-v1",
+  "created_utc": "2026-08-27",
+  "claim": "For the public 164-point S100 configuration, eight record removals permit at least six simultaneous outside additions.",
+  "notation": "e_S100(8) >= 6",
+  "evidence_level": "positive witness checked by an independent exact-integer geometry implementation",
+  "witness": {
+    "radius_removed": 8,
+    "target_added": 6,
+    "removals": [[26, 59], [7, 48], [73, 59], [22, 4], [92, 48], [77, 4], [96, 2], [3, 2]],
+    "additions": [[4, 1], [10, 43], [22, 0], [77, 0], [89, 43], [95, 1]],
+    "final_size": 162,
+    "path": "research/radius8_exchange_n100_r8_k6_witness.txt",
+    "bytes": 419,
+    "sha256": "9bacb1e56856425a99acfe50bd4c7747b475515de805a788c68b537bed91deb8"
+  },
+  "checker": {
+    "path": "research/audit/verify_exchange_witness.py",
+    "sha256": "8e28531469ce599785921139b3356b6150f1e6583856a84c14b03c1dc7b878aa",
+    "command": "research/.venv/bin/python research/audit/verify_exchange_witness.py research/radius8_exchange_n100_r8_k6_witness.txt",
+    "success_line": "exchange_witness_verified=true removals=8 additions=6 final_size=162"
+  },
+  "source_provenance": {
+    "alphaevolve_repository_commit": "8f447457957deac61e28bf1676746f0753b3b2f8",
+    "notebook_sha256": "653accd24369672f1cc757b203dae311f1489895a1cb8e6242d3308fe657891d",
+    "canonical_record_sha256": "ffe9583db47dbcc7e29e12a7d148fb1388827ac9917d1aefa7eb5fee89b4e7d6"
+  },
+  "limitations": [
+    "This witness is a lower bound only.",
+    "No eight-removal, nine-addition witness has been found.",
+    "The upper bound e_S100(8) < 9 remains open unless accompanied by a later exact certificate."
+  ]
+}

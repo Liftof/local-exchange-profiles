@@ -1,0 +1,36 @@
+{
+  "format": "radius9-individual-unlock-verification-v1",
+  "status": "VERIFIED",
+  "witness_sha256": "ca463e0c546b2a472bb375964d657af5c2c7461a9ebe89aefa5edd08ec9a4d51",
+  "radius_removed": 9,
+  "individually_unlocked": 7,
+  "all_individual_integer_geometry_checks": true,
+  "subsets_exhaustively_checked": 128,
+  "maximum_joint_subset_within_list": 6,
+  "best_joint_subset": [
+    [
+      4,
+      98
+    ],
+    [
+      10,
+      56
+    ],
+    [
+      22,
+      99
+    ],
+    [
+      75,
+      81
+    ],
+    [
+      89,
+      56
+    ],
+    [
+      95,
+      98
+    ]
+  ]
+}

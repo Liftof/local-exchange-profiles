@@ -1,0 +1,13 @@
+{
+  "cache": "research/radius7_paircompat_n100_r7.json",
+  "cache_sha256": "ceb308448dde48c205fa7ca9c8a1c9a2c382b84da993d09d1fe5dc7bf055dca1",
+  "compatible_pairs": 11942,
+  "elapsed_seconds": 222.54148986097425,
+  "eligible_candidates": 1324,
+  "forced_pair_masks_nonempty": 138156,
+  "forced_record_entries": 167364,
+  "minimal_covers": 55528,
+  "pairs_tested": 875826,
+  "record_size": 164,
+  "status": "VERIFIED"
+}

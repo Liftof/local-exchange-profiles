@@ -1,0 +1,916 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,
+  urlcolor=blue!55!black]{hyperref}
+\hypersetup{
+  pdftitle={Exact Local Exchange Profiles and Reconfiguration Barriers for Isosceles-Triangle-Free Grid Sets},
+  pdfauthor={Pierre-Baptiste Borges},
+  pdfsubject={Local exchange profiles, TAR barriers, and machine-checked certificates}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{computationalclaim}[theorem]{Computational claim}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\dist}{d_{\triangle}}
+\newcommand{\N}{\mathbb{N}}
+
+\title{Exact Local Exchange Profiles and Reconfiguration Barriers for
+Isosceles-Triangle-Free Grid Sets}
+\author{Pierre-Baptiste Borges\\[2pt]\small Independent researcher\\
+  \small\texttt{pierrebaptiste.borges@gmail.com}}
+\date{27 August 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Let $S$ be a fixed set of points in an integer grid containing no isosceles
+triangle, with collinear triples included.  We introduce two local invariants.
+The individual-unlock profile $u_S(r)$ is the largest number of outside points
+that become individually admissible after deleting $r$ points of $S$.  The
+exchange profile $e_S(r)$ is the largest number of mutually compatible outside
+points that can be inserted after those deletions.  We prove an exact slice
+identity for $e_S$ and a general lower bound on token-addition/removal (TAR)
+reconfiguration barriers derived from either profile.  We then describe an
+exact algorithm based on link-graph vertex covers, pair-forced deletion masks,
+and antichains of minimal masks.
+
+For the public $112$-point configuration in the $64\times64$ grid, our current
+computation gives $e_S(7)=5<u_S(7)=6$, showing that individual admissibility can
+strictly overestimate repair capacity.  For the public $164$-point
+$100\times100$ configuration, an independently generated CNF and a verified
+DRAT proof establish $u_S(6)=4$.  At radius seven, a directly checked witness
+gives $e_S(7)\ge5$, while an independently regenerated core-SAT instance and a
+second verified DRAT proof establish $e_S(7)<6$.  At radius eight, a directly
+checked $8\to6$ exchange and an independently audited exhaustive search give
+$e_S(8)=6$; the negative search remains program-verified rather than
+proof-trace certified.  It follows that every distinct isosceles-free set of
+size at least $164$ deletes at least nine points of the $164$-point
+configuration, every equal-size alternative has symmetric-difference distance
+at least $18$, every improvement has distance at least $19$, and every TAR
+path to an equal-or-larger distinct set descends to size at most $161$.  We
+make no claim that either public configuration is globally optimal.
+\end{abstract}
+
+\begin{center}
+\fbox{\parbox{0.92\linewidth}{\textbf{Computational evidence.}
+The radius-six and radius-seven upper bounds for the
+$100\times100$ instance have machine-verified DRAT certificates and
+independently regenerated reductions.  The new radius-eight upper bound is an
+independently audited exhaustive program computation, but has no DRAT/LRAT
+proof trace.  The results therefore have different evidence levels;
+Section~\ref{sec:certification} states those levels and the remaining trust
+boundaries.}}
+\end{center}
+
+\section{Introduction}
+
+Write
+\[
+  G_n=\{0,1,\ldots,n-1\}^2.
+\]
+The extremal problem asks for a largest subset of $G_n$ containing no three
+distinct points whose three pairwise distances include a repeated value.
+Thus an isosceles triangle is forbidden even when its three vertices are
+collinear.  The problem has recently served as a benchmark for machine-assisted
+construction.  PatternBoost reported SAT optima for small grids, a
+$110$-point set for $n=64$, and a $160$-point set for $n=100$
+\cite{charton2024patternboost}.  AlphaEvolve subsequently published the
+$112$- and $164$-point configurations studied here and expressly did not claim
+that the latter is optimal \cite{georgiev2025exploration,alphaevolve59}.
+Geometry-aware Monte Carlo tree search has also treated this problem as one of
+several combinatorial-geometry benchmarks \cite{zhang2026geometry}.
+
+The global and asymptotic questions remain difficult.  Croot, Mao, Pohoata,
+Sheffer, and Yip proved an upper bound of the form
+\[
+  n^2\exp\!\left(-c\frac{\log n}{\log\log n}\right)
+\]
+for the maximum cardinality, for an absolute constant $c>0$
+\cite{croot2026largesieve}.  Counting all isosceles triangles in a regular grid
+is a related but distinct problem \cite{wu2016counting}.  Our focus is neither
+global optimality nor asymptotics.  We ask instead how a particular large
+construction can be changed locally.
+
+Local optimality and bounded swaps are standard concepts in combinatorial
+optimization \cite{komusiewicz2025local,ganian2026framework}.  TAR
+reconfiguration, buffer size, cardinality range, and minimum-cardinality paths
+are also established notions
+\cite{deberg2016thresholds,bulteau2021parametrization,hoang2026maxmin}.
+Our candidate contribution is a concrete local profile around a fixed
+hypergraph independent set, its translation into a TAR-barrier lower bound,
+and exact computations for the two public grid configurations.  Link graphs,
+which underlie our reduction, are standard hypergraph objects; see, for
+example, \cite{hancock2016solutionfree}.
+
+The contributions of this article are as follows.
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+  \item We define the individual-unlock profile $u_S$ and the compatible
+  exchange profile $e_S$, and identify $e_S$ with the exact maximum on a
+  fixed deletion slice.
+  \item We derive a transition-sensitive profile-to-TAR lemma.  The resulting
+  expression is a lower bound on the true reconfiguration barrier, not an
+  assertion that the barrier itself is exact.
+  \item We give an exact antichain recurrence for deciding whether $k$ outside
+  points can coexist after at most $r$ deletions in any $3$-uniform
+  hypergraph.
+  \item We report the current profiles for the AlphaEvolve $n=64$ and $n=100$
+  constructions, including the strict separation $e_S(7)<u_S(7)$ at $n=64$
+  and the exact value $e_{S_{100}}(8)=6$.
+  \item We archive verified DRAT proofs for the independently audited
+  individual-unlock cell $u_{S_{100}}(6)=4$ and for the decisive compatible
+  upper bound $e_{S_{100}}(7)<6$.  We separately document and audit the
+  exhaustive radius-eight computation, which does not yet have the same
+  proof-trace evidence level.
+\end{enumerate}
+
+To our knowledge after a targeted literature search, these exact profiles and
+the particular profile-derived expression in Lemma~\ref{lem:tar} have not been
+used for this grid problem.  This is a provisional priority statement, not a
+claim that the constituent ideas---local exchange, link graphs, TAR, or SAT
+certification---are new.
+
+\section{The hypergraph model and local profiles}
+\label{sec:definitions}
+
+Let $H_n=(G_n,E_n)$ be the $3$-uniform hypergraph in which
+$\{a,b,c\}\in E_n$ if and only if $a,b,c$ are distinct and
+\[
+ \|a-b\|_2^2=\|a-c\|_2^2,
+ \quad\text{or}\quad
+ \|a-b\|_2^2=\|b-c\|_2^2,
+ \quad\text{or}\quad
+ \|a-c\|_2^2=\|b-c\|_2^2.
+\]
+All computations use these integer equalities; no floating-point geometry is
+needed.  Let $\F_n$ be the hereditary family of independent sets of $H_n$.
+Most of the statements below hold for an arbitrary finite ground set $V$ and
+an arbitrary hereditary family $\F\subseteq 2^V$.
+
+Fix $S\in\F$, write $m=|S|$, and let $R\subseteq S$ be a set of deleted
+original vertices.  Define the set of individually admissible outsiders by
+\[
+  \calU_S(R)=\bigl\{p\in V\setminus S:
+       (S\setminus R)\cup\{p\}\in\F\bigr\}.
+\]
+
+\begin{definition}[Individual-unlock and exchange profiles]
+For $0\le r\le m$, define
+\begin{align*}
+  u_S(r)&=\max_{\substack{R\subseteq S\\|R|=r}}|\calU_S(R)|,\\
+  e_S(r)&=\max\bigl\{|A|: R\subseteq S,\ |R|=r,\ A\subseteq V\setminus S,
+                 \ (S\setminus R)\cup A\in\F\bigr\}.
+\end{align*}
+Then $e_S(r)\le u_S(r)$.
+\end{definition}
+
+The inequality can be strict because two points can each be admissible with
+the retained portion of $S$ but form a forbidden triple together with a third
+point, or three outsiders can themselves form a forbidden triple.  The
+$n=64$, $r=7$ computation in Section~\ref{sec:results} gives a concrete strict
+example.
+
+For $X\in\F$, put $R_X=S\setminus X$, $A_X=X\setminus S$, and
+$r_X=|R_X|$.  Heredity implies
+\[
+  A_X\subseteq\calU_S(R_X),
+\]
+since $(S\setminus R_X)\cup\{p\}\subseteq X$ for each $p\in A_X$.
+Consequently
+\begin{equation}
+  |X|=m-r_X+|A_X|\le m-r_X+u_S(r_X).
+  \label{eq:unlock-slice}
+\end{equation}
+The compatible profile gives the exact maximum rather than only an upper
+bound.
+
+\begin{proposition}[Exact slice identity]
+\label{prop:slice}
+For every $0\le r\le m$,
+\[
+ \max_{\substack{X\in\F\\|S\setminus X|=r}}|X|
+ =m-r+e_S(r).
+\]
+\end{proposition}
+
+\begin{proof}
+Every set in the slice decomposes uniquely as
+$X=(S\setminus R_X)\cup A_X$, with $|R_X|=r$ and
+$A_X\subseteq V\setminus S$.  Maximizing $|X|=m-r+|A_X|$ over exactly these
+feasible pairs $(R_X,A_X)$ is the definition of $e_S(r)$.
+\end{proof}
+
+We use symmetric-difference distance
+\[
+  \dist(X,Y)=|X\triangle Y|.
+\]
+In this paper, ``$k$-swap-optimal for improvement'' means that no
+$T\in\F$ with $|T|>|S|$ satisfies $\dist(S,T)\le k$.  This convention should
+be stated explicitly: other local-search papers may bound the numbers deleted
+and inserted separately, in which case the numerical radius must be
+translated rather than copied.
+
+\section{A profile-derived TAR barrier}
+\label{sec:tar}
+
+A TAR path is a sequence $X_0,X_1,\ldots,X_\ell\in\F$ satisfying
+$|X_i\triangle X_{i+1}|=1$ for every $i$.  For an integer $R\ge1$, define
+\begin{equation}
+\begin{aligned}
+ D^u_S(R)&=\max\left\{0,\max_{0\le r<R}\bigl(r+1-u_S(r)\bigr)\right\},\\
+ D^e_S(R)&=\max\left\{0,\max_{0\le r<R}\bigl(r+1-e_S(r)\bigr)\right\}.
+\end{aligned}
+\label{eq:barriers}
+\end{equation}
+Because $e_S(r)\le u_S(r)$, one has $D^e_S(R)\ge D^u_S(R)$.
+
+\begin{lemma}[Deletion-transition TAR barrier]
+\label{lem:tar}
+Let $V$ be finite, let $\F\subseteq2^V$ be hereditary, and let
+$S\in\F$ have size $m$.  Suppose
+$X_0=S,X_1,\ldots,X_\ell=T$ is a TAR path and
+$|S\setminus T|\ge R$.  Then
+\begin{align}
+ \min_{0\le i\le\ell}|X_i|
+   &\le m-D^u_S(R), \label{eq:tar-u}\\
+ \min_{0\le i\le\ell}|X_i|
+   &\le m-D^e_S(R). \label{eq:tar-e}
+\end{align}
+Thus $D^u_S(R)$ and $D^e_S(R)$ are lower bounds on the loss below $|S|$
+forced along every such path.
+\end{lemma}
+
+\begin{proof}
+Set $r_i=|S\setminus X_i|$.  We have $r_0=0$ and $r_\ell\ge R$.
+A one-vertex TAR move changes $r_i$ by at most one.  Therefore, for every
+$r=0,1,\ldots,R-1$, the path contains an upward transition with
+$r_i=r$ and $r_{i+1}=r+1$.  Such a transition removes one retained element of
+$S$, and hence $|X_{i+1}|=|X_i|-1$.
+
+Immediately before this deletion, inequality~\eqref{eq:unlock-slice} gives
+\[
+ |X_i|\le m-r+u_S(r)=m-\bigl(r-u_S(r)\bigr).
+\]
+Consequently
+\[
+ |X_{i+1}|\le m-r-1+u_S(r)
+ =m-\bigl(r+1-u_S(r)\bigr).
+\]
+Taking the most restrictive of these mandatory deletion transitions, together
+with the trivial $\min_i|X_i|\le|X_0|=m$, yields \eqref{eq:tar-u}.
+Proposition~\ref{prop:slice} replaces the pre-deletion slice bound by its exact
+maximum $m-r+e_S(r)$ and gives \eqref{eq:tar-e}.
+\end{proof}
+
+\begin{remark}[What the formula does and does not prove]
+Even when every value of $u_S$ or $e_S$ is exact, $D^u_S(R)$ or
+$D^e_S(R)$ is only a lower bound on the true TAR barrier.  Compatibility
+between slices and the order of valid moves can force a deeper valley.  If one
+has only certified upper bounds $\overline u(r)\ge u_S(r)$, then
+$\max\{0,\max_{r<R}(r+1-\overline u(r))\}$ is still a valid, possibly weaker,
+lower bound.
+The strict range $r<R$ in \eqref{eq:barriers} is essential: a path whose target
+deletes at least $R$ originals is guaranteed to make the upward transitions
+$r\to r+1$ for $0\le r<R$ without any further hypothesis.  A path reaching
+$R+1$ makes one additional transition, so a known radius-$R$ profile value can
+strengthen the maximum; we use $r<R$ deliberately because it requires only the
+strict prefix.  The maximum with zero in \eqref{eq:barriers} also covers a
+nonmaximal $S$, for which additions before the first deletion may prevent any
+loss below $m$.  The configurations studied here have $u_S(0)=0$.
+\end{remark}
+
+\begin{corollary}[Local isolation and improvement distance]
+\label{cor:distance}
+Assume $e_S(0)=0$, and let $R\ge1$.
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+  \item If $e_S(r)<r$ for $1\le r<R$, then every $T\in\F\setminus\{S\}$
+  with $|T|\ge|S|$ deletes at least $R$ elements of $S$.
+  \item If $e_S(r)\le r$ for $0\le r<R$, then every strict improvement
+  $T\in\F$ with $|T|>|S|$ deletes at least $R$ elements of $S$ and satisfies
+  $\dist(S,T)\ge2R+1$.
+  \item Under the hypothesis in (i), every distinct equal-size $T$ satisfies
+  $\dist(S,T)\ge2R$.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+Let $r=|S\setminus T|$ and $a=|T\setminus S|$.  Feasibility gives
+$a\le e_S(r)$.  If $|T|\ge|S|$, then $a\ge r$, contradicting
+$e_S(r)<r$ when $1\le r<R$; the $r=0$ case has $T=S$ because $e_S(0)=0$.
+For a strict improvement, $a\ge r+1$; hence
+$e_S(r)\le r$ excludes $r<R$, and
+$\dist(S,T)=r+a\ge2R+1$.  For a distinct equal-size set, $a=r$ and the same
+identity gives distance at least $2R$.
+\end{proof}
+
+\section{Exact exchange computation by antichains}
+\label{sec:algorithm}
+
+This section gives the mathematical recurrence used by the radius-seven and
+radius-eight searches.  It is independent of grid geometry and applies to a fixed independent
+set $S$ in any $3$-uniform hypergraph $H=(V,E)$.
+
+\subsection{Link graphs and individual covers}
+
+For $p\in V\setminus S$, define its link graph on $S$ by
+\[
+  L_S(p)=\bigl(S,\{\{a,b\}\subseteq S:\{p,a,b\}\in E\}\bigr).
+\]
+Then
+\begin{equation}
+ p\in\calU_S(R)
+ \quad\Longleftrightarrow\quad
+ R\text{ is a vertex cover of }L_S(p).
+ \label{eq:link-cover}
+\end{equation}
+Indeed, the only possible hyperedge in $(S\setminus R)\cup\{p\}$ contains
+$p$ and two retained vertices of $S$.
+
+Fix a deletion radius $r$.  Let $\calC_r(p)$ be the family of
+inclusion-minimal vertex covers of $L_S(p)$ having size at most $r$.  A
+branching recursion that selects an uncovered edge $ab$ and branches on
+deleting $a$ or $b$ enumerates this family exactly.  Lower bounds from
+edge-disjoint matchings can prune a branch without changing the answer.
+
+\subsection{Pair-forced masks and the antichain recurrence}
+
+For two outsiders $p,q\in V\setminus S$, put
+\[
+  F_S(p,q)=\{s\in S:\{p,q,s\}\in E\}.
+\]
+Every deletion set supporting both $p$ and $q$ must contain the entire mask
+$F_S(p,q)$.
+
+For a family $\mathcal A\subseteq2^S$, write
+$\min_{\subseteq}(\mathcal A)$ for its inclusion-minimal members.  Define
+$\calM_r(\varnothing)=\{\varnothing\}$.  If $Q\subseteq V\setminus S$ has no
+hyperedge entirely among its elements and $p\notin Q$, define
+\begin{multline}
+ \calM_r(Q\cup\{p\})=\min_{\subseteq}\Bigl\{
+ M\cup C\cup\bigcup_{q\in Q}F_S(p,q):
+ M\in\calM_r(Q),\ C\in\calC_r(p),\\
+ \bigl|M\cup C\cup\bigcup_{q\in Q}F_S(p,q)\bigr|\le r
+ \Bigr\}.
+ \label{eq:antichain-recurrence}
+\end{multline}
+If $Q\cup\{p\}$ contains an all-outsider hyperedge, set
+$\calM_r(Q\cup\{p\})=\varnothing$.
+
+\begin{proposition}[Exactness of the antichain recurrence]
+\label{prop:antichain}
+For every $Q\subseteq V\setminus S$, $\calM_r(Q)$ is precisely the antichain
+of inclusion-minimal sets $M\subseteq S$ of size at most $r$ such that
+$(S\setminus M)\cup Q$ is independent.  Consequently,
+\[
+ e_S(r)\ge k
+ \quad\Longleftrightarrow\quad
+ \text{there exists }Q\subseteq V\setminus S, |Q|=k,
+ \ \calM_r(Q)\ne\varnothing.
+\]
+Here a supporting mask of size less than $r$ may be padded with arbitrary
+additional deletions from $S$.
+\end{proposition}
+
+\begin{proof}
+The claim is immediate for $Q=\varnothing$.  Suppose it holds for $Q$.
+Any forbidden triple in $(S\setminus M')\cup(Q\cup\{p\})$ is of one of four
+types.  A triple contained in $S$ is impossible because $S$ is independent.
+A triple containing $p$ and two vertices of $S$ is excluded exactly when
+$M'$ contains a cover in $\calC_r(p)$, by \eqref{eq:link-cover}.  A triple
+containing $p,q$ and one vertex $s\in S$ is excluded exactly when
+$F_S(p,q)\subseteq M'$.  Conditions involving old elements of $Q$ are already
+encoded by a member $M\in\calM_r(Q)$.  Finally, a triple entirely in
+$Q\cup\{p\}$ cannot be repaired by deleting elements of $S$ and is rejected
+explicitly.
+
+Thus the unions in \eqref{eq:antichain-recurrence} are exactly the supporting
+masks of size at most $r$, before removal of supersets.  Taking
+inclusion-minimal members preserves existence and yields precisely the claimed
+antichain.  The final equivalence follows from the definition of $e_S(r)$ and
+the fact that independence is preserved under additional deletions.
+\end{proof}
+
+The implementation first constructs a graph on eligible outsiders, retaining
+an edge only when its two endpoints have a common supporting mask of size at
+most $r$.  A feasible $k$-set must be a $k$-clique in this graph, so a
+clique-style DFS provides an efficient necessary prefilter.  Pairwise
+compatibility is not sufficient: at every node the DFS carries the full
+antichain from \eqref{eq:antichain-recurrence} and checks all-outsider triples.
+
+\section{Computational results}
+\label{sec:results}
+
+The two main configurations are the public AlphaEvolve outputs
+\cite{georgiev2025exploration,alphaevolve59}.  We denote the $164$-point set in
+$G_{100}$ by $S_{100}$ and the $112$-point set in $G_{64}$ by $S_{64}$.
+Section~\ref{sec:certification} separates theorem-level deductions from the
+current evidence for each computed cell.
+
+\subsection{The \texorpdfstring{$164$}{164}-point construction in
+\texorpdfstring{$G_{100}$}{G100}}
+
+The current profile is
+\begin{center}
+\begin{tabular}{c*{9}{c}}
+\toprule
+$r$ & $0$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$\\
+\midrule
+$u_{S_{100}}(r)$ & $0$ & $0$ & $1$ & $1$ & $2$ & $3$ & $4$ & $\ge5$ & $\ge6$\\
+$e_{S_{100}}(r)$ & $0$ & $0$ & $1$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Only the displayed lower bounds are claimed for $u_{S_{100}}(7)$ and
+$u_{S_{100}}(8)$; their exact values remain open.  Time-limited decisions at
+both radii returned \textsc{unknown}, which is not an upper bound.  There is a
+directly checked $7\to5$ exchange:
+\begin{align*}
+R={}&\{(92,51),(96,97),(7,51),(8,93),(26,40),(73,40),(77,95)\},\\
+A={}&\{(95,98),(89,56),(75,81),(10,56),(77,99)\}.
+\end{align*}
+Exact integer geometry verifies that $(S_{100}\setminus R)\cup A$ is
+independent.  The antichain DFS also reports $e_{S_{100}}(7)<6$, with
+$15{,}227$ search states and $47.762$ seconds in the logged run.  The decisive
+upper bound no longer rests on that traversal alone: a separately encoded
+no-symmetry core CNF and its DRAT proof have passed independent regeneration
+and proof checking, as detailed in Section~\ref{sec:certification}.
+
+At radius eight, an independently checked exchange is
+\begin{align*}
+R={}&\{(26,59),(7,48),(73,59),(22,4),\\
+    &\qquad (92,48),(77,4),(96,2),(3,2)\},\\
+A={}&\{(4,1),(10,43),(22,0),(77,0),(89,43),(95,1)\}.
+\end{align*}
+Exact integer geometry verifies that the resulting $162$-point set is
+independent.  An exhaustive antichain search rejects seven additions even in
+a necessary-condition relaxation that omits all constraints on triples of
+outsiders and disables color pruning.  Section~\ref{sec:certification}
+records the independent input regeneration, search counts, and remaining
+program-verification boundary.
+
+\begin{computationalclaim}[Audited local consequences for $S_{100}$]
+\label{claim:n100}
+The radius-eight computation described in Section~\ref{sec:certification}
+implies:
+\begin{enumerate}[label=(\roman*),leftmargin=*]
+  \item every $T\ne S_{100}$ with $|T|\ge164$ deletes at least nine points of
+  $S_{100}$;
+  \item every distinct $164$-point set has
+  $\dist(S_{100},T)\ge18$;
+  \item every set of size at least $165$ has
+  $\dist(S_{100},T)\ge19$;
+  \item $S_{100}$ is $18$-swap-optimal for improvement under the
+  symmetric-difference convention of Section~\ref{sec:definitions}; and
+  \item every TAR path from $S_{100}$ to a distinct set of size at least $164$
+  contains a set of size at most $161$, so no such endpoint lies in the same
+  component when TAR is restricted to sets of size at least $162$;
+  \item the component of $S_{100}$ in the TAR graph induced by sets of size at
+  least $163$ is exactly the star with center $S_{100}$ and leaves
+  $S_{100}\setminus\{s\}$ for $s\in S_{100}$.
+\end{enumerate}
+\end{computationalclaim}
+
+\begin{proof}
+For $1\le r\le8$, the displayed exchange values satisfy
+$e_{S_{100}}(r)<r$.  Corollary~\ref{cor:distance} with $R=9$ gives (i)--(iv).
+For (v), the endpoint must delete at least nine original points by (i), and
+Lemma~\ref{lem:tar} applies.  In fact the already computed slice $r=3$ has
+$e_{S_{100}}(3)=u_{S_{100}}(3)=1$.  Immediately after the mandatory
+transition from three to four deleted originals, the path therefore has size
+at most $164-3+1-1=161$.  Equivalently, the known profile entries give
+$D^u_{S_{100}}(9)=D^e_{S_{100}}(9)=3$: the open values satisfy
+$u_{S_{100}}(7)\ge5$ and $u_{S_{100}}(8)\ge6$, so their contributions to
+$D^u$ cannot exceed $3$.
+
+For (vi), $e_{S_{100}}(0)=0$ means that no outsider can be added directly to
+$S_{100}$, so its only TAR neighbors are its $164$ single deletions.  Such a
+leaf has size $163$: a further deletion violates the threshold, adding an
+outsider is impossible because $e_{S_{100}}(1)=0$, and restoring its unique
+missing record point returns to $S_{100}$.
+\end{proof}
+
+\paragraph{Exploratory radius-nine frontier.}
+The next improvement decision is $e_{S_{100}}(9)\ge10$.  A bounded exact DFS
+returned \textsc{unknown} after $580.099$ seconds, $233{,}472$ nodes, and
+$91{,}148{,}661{,}627$ cover tests; three deterministic heuristics evaluated
+$8{,}446{,}705$ deletion masks without finding a $9\to10$ witness.  These are
+timeouts and sampled failures, not an upper bound.  They did produce a directly
+verified lower bound $u_{S_{100}}(9)\ge7$.  For one archived mask the seven
+unlocked outsiders are pairwise compatible, but
+\[
+  (4,98),\ (75,81),\ (77,99)
+\]
+form an isosceles triple: the first point has squared distance $5330$ to each
+of the other two.  Hence the maximum compatible subset of this particular
+seven-point list is six.  This gives a concrete radius-nine illustration that
+pair compatibility alone does not capture all repair obstructions; globally,
+both profile values at radius nine remain open beyond their lower bounds.
+
+None of these statements asserts that $164$ is the maximum cardinality in
+$G_{100}$.  They describe the neighborhood of this one public construction.
+
+\subsection{The \texorpdfstring{$112$}{112}-point construction in
+\texorpdfstring{$G_{64}$}{G64}}
+
+For $S_{64}$, the current exact computation is
+\begin{center}
+\begin{tabular}{c*{8}{c}}
+\toprule
+$r$ & $0$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$\\
+\midrule
+$u_{S_{64}}(r)$ & $0$ & $1$ & $2$ & $2$ & $4$ & $4$ & $5$ & $6$\\
+$e_{S_{64}}(r)$ & $0$ & $1$ & $2$ & $2$ & $4$ & $4$ & $5$ & $5$\\
+\bottomrule
+\end{tabular}
+\end{center}
+In particular,
+\[
+  e_{S_{64}}(7)=5<6=u_{S_{64}}(7).
+\]
+This strict separation demonstrates why the individual-unlock profile cannot
+in general be treated as the capacity of a simultaneous repair.  The radius
+six compatible optimum is also five: $e_{S_{64}}(6)=u_{S_{64}}(6)=5$.
+
+The configuration is not isolated among equal-size sets.  The exchange
+\[
+  S_{64}'=\bigl(S_{64}\setminus\{(56,2)\}\bigr)\cup\{(62,2)\}
+\]
+is valid, so $\dist(S_{64},S_{64}')=2$.  On the other hand, any strict
+improvement must delete at least eight original points and therefore has
+symmetric-difference distance at least $17$.  Thus $S_{64}$ is
+$16$-swap-optimal for improvement under our convention.  Moreover,
+\[
+ D^u_{S_{64}}(8)=2,
+ \qquad
+ D^e_{S_{64}}(8)=3.
+\]
+Every TAR path from $S_{64}$ to an improvement consequently contains a set of
+size at most $109$.  The compatible profile gives a strictly stronger barrier
+than the individual profile on this instance.
+
+\section{Certification and evidence levels}
+\label{sec:certification}
+
+Computer-assisted extremal results require two separate arguments: the CNF or
+search instance must faithfully encode the mathematical problem, and the
+claimed solver outcome must be checkable.  A second solver using the same
+generator is useful testing but is not an independent certificate.  Certified
+SAT workflows for combinatorial mathematics motivate our standard here
+\cite{heule2016pythagorean,cruzfilipe2017rat,szeider2026lratcatcher}.
+
+\subsection{Independently audited cell
+\texorpdfstring{$u_{S_{100}}(6)=4$}{uS100(6)=4}}
+
+The lower bound has an explicit witness
+\begin{align*}
+R={}&\{(26,59),(7,48),(73,59),(92,48),(96,2),(3,2)\},\\
+\calU_{S_{100}}(R)={}&\{(4,1),(10,43),(89,43),(95,1)\}.
+\end{align*}
+An independent integer-geometry implementation verifies that these four and
+only these four points are unlocked by $R$.
+
+For the upper bound, a separate generator extracted the record from the public
+notebook, checked its validity, rebuilt all conflicts by distance rings, and
+constructed the decision instance ``six deletions unlock at least five outside
+points.''  The grid has $9{,}836$ outsiders and $154{,}440$ link-graph edges in
+total.  A simple certificate of seven pairwise disjoint conflict edges excludes
+$9{,}099$ outsiders, because six deleted record vertices cannot cover such a
+matching.  The independently checked matching file leaves $737$ conservative
+candidates in the CNF.
+
+The archived instance has $5{,}703$ variables and $24{,}775$ clauses.  Its
+identity is fixed by the following artifact paths and hashes:
+\begin{description}
+\item[CNF]
+\path{research/audit/r6_t5_matching.cnf}\\
+SHA-256:
+\path{f72229bacc773b19bf78209134cc666496854e60d1a515b4809ae2deeca23651}
+\item[DRAT proof]
+\path{research/audit/r6_t5_matching.drat}\\
+SHA-256:
+\path{149d3592fe5a2d6afccc05905b45ddc638947d537df6bc99865b9d190b20be9a}
+\end{description}
+The CNF is $381{,}497$ bytes.  CaDiCaL~1.9.5 at commit
+\path{146207318796f094dcded87349a64f0c6927309e} produced a
+$291{,}778{,}586$-byte binary DRAT proof.  \texttt{drat-trim} at commit
+\path{2e3b2dc0ecf938addbd779d42877b6ed69d9a985} returned
+\texttt{s VERIFIED} in $228.846$ seconds.  The proof manifest records all
+commands, hashes, versions, and checker output.
+
+This proof validates the archived CNF.  Confidence in the mathematical
+translation comes from the independent generator, direct witness checks,
+matching certificates, exhaustive small cardinality tests, and a written proof
+of the encoding.  It is not a formal proof of the geometry-to-CNF generator.
+A conversion of the full instance to LRAT followed by a CakeML-produced checker
+has not been completed because of local storage constraints; only the checker
+chain on a tiny smoke instance has passed.  The manuscript therefore does not
+claim end-to-end formal verification.
+
+\subsection{Machine-verified radius-seven exchange bound}
+
+For $S_{100}$ at $r=7$, there are $1{,}324$ eligible outsiders.  Of the
+$\binom{1324}{2}=875{,}826$ pairs, pair preprocessing rejects $863{,}884$ and
+retains $11{,}942$.  An independently written pair-cache regenerator agrees
+with those decisions and hashes.  The antichain DFS reports \textsc{unsat} for
+six additions after $15{,}227$ nodes, $1{,}013{,}058$ family extensions, and
+$475{,}262$ generated masks.  This is now corroborative rather than the sole
+upper-bound evidence.
+
+Any six-vertex clique lies in the $5$-core of the pair-compatibility graph.
+The exact core has $392$ candidates and $11{,}054$ compatible edges.  A second
+SAT encoding imposes the one-outsider cover clauses, every two-outsider forced
+deletion mask, and all three-outsider incompatibilities.  Independent
+standard-library programs regenerate the eligible candidates, pair graph,
+$5$-core, and all $200{,}796$ ternary no-goods.  The resulting no-symmetry CNF
+has $7{,}386$ variables and $308{,}590$ clauses:
+\begin{description}
+\item[Core CNF]
+\path{research/audit/radius7_core_r7_k6_nosym.cnf}\\
+SHA-256:
+\path{2461ee72b797a636de8154422544c2c3673e43d9c83e069f41a1c434eef26bba}
+\item[DRAT proof]
+\path{research/audit/radius7_core_r7_k6_nosym.drat}\\
+SHA-256:
+\path{6a845c1af080a63661599f9633910b170293502c9319688cf55829ca1ba37c3b}
+\end{description}
+The CNF is $4{,}855{,}298$ bytes.  CaDiCaL returned \textsc{unsat} with exit
+code $20$ and wrote a $25{,}282{,}853$-byte proof.  Independent
+\texttt{drat-trim} verification returned \texttt{s VERIFIED} with exit code
+$0$ in $26.669$ seconds; its core contained $252{,}110$ of the $308{,}590$
+input clauses and used $22{,}191{,}309$ resolution steps, with zero RAT lemmas
+in the core.  Together with the directly checked five-addition witness, this
+establishes $e_{S_{100}}(7)=5$ at the machine-verified evidence level.
+
+The DRAT checker proves that the archived CNF is unsatisfiable.  The independent
+regenerators and the human proof of the reduction connect that CNF to the
+geometric exchange problem, but this connection is not formally verified in a
+proof assistant.  The full proof has not been converted to LRAT, and neither
+the manuscript nor the artifacts have been peer reviewed.  ``Machine
+verified'' is therefore the accurate description; ``formally verified
+end-to-end'' is not.
+
+\subsection{Independently audited radius-eight exhaustive search}
+
+For $S_{100}$ at $r=8$, the search input has $2{,}036$ eligible outsiders and
+$150{,}848$ inclusion-minimal one-outsider covers.  Its pair preprocessing
+stores $331{,}300$ nonempty forced-deletion masks and retains $35{,}950$ of the
+$2{,}071{,}630$ outsider pairs.  A standard-library audit, using an alternative
+vertex-cover enumerator and direct squared-distance geometry, independently
+regenerated the record, every candidate and cover, every forced mask, and
+every pair decision.  All counts and decisions matched the binary input and
+JSON cache exactly.
+
+The positive side is the $8\to6$ witness displayed above, checked by a
+separate exact-integer cubic enumeration of all triples in the resulting
+$162$-point set.  For the upper bound, the C++ implementation of
+Proposition~\ref{prop:antichain} exhaustively rejected a target of seven.  A
+deliberately weaker replay removed every all-outsider-triple constraint and
+disabled the coloring bound.  It still returned \textsc{unsat}, after
+$78{,}031$ nodes, $10{,}009{,}190$ antichain extensions,
+$5{,}388{,}204{,}289$ cover-union tests, and $3{,}217{,}876$ generated masks.
+Every genuine seven-point exchange is feasible in this relaxation, so this
+negative result yields $e_{S_{100}}(8)<7$ without relying on either the
+all-outsider-triple code or color pruning.  Together with the witness, it gives
+$e_{S_{100}}(8)=6$.
+
+The source was independently recompiled and the decisive relaxed run replayed
+with identical structural counters.  Regression tests reproduce the certified
+radius-seven outcome; sanitizer and randomized differential tests exercise the
+mask recurrence and coloring bound.  These checks materially narrow the trust
+boundary, but they are not a portable proof trace.  No DRAT/LRAT certificate or
+proof-assistant verification exists for the radius-eight upper bound.  We
+therefore describe it as an exact exhaustive computation, independently
+audited and cross-checked, rather than as formally or proof-trace verified.
+
+The $S_{64}$ runs and the remaining table cells have executable witnesses and
+current exact-solver logs, but do not yet have a uniform suite of independently
+checked proof certificates comparable to the decisive $S_{100}$ radius-six and
+radius-seven artifacts.  They are accordingly reported as reproducible
+computations rather than proof-trace-certified results.
+
+\section{Algorithmic interpretation}
+
+The profiles have an immediate use in destroy-and-repair search.  After
+deleting $r$ elements of an incumbent $S$, no feasible repair can insert more
+than $e_S(r)$ outsiders, and the cheaper profile $u_S(r)$ is a safe upper
+bound.  A radius satisfying $u_S(r)\le r$ cannot directly improve $S$.
+Consequently, a solver can skip such radii when it seeks a one-shot
+improvement, or deliberately treat them only as transit states in a
+non-monotone search.
+
+For $S_{100}$, the audited values exclude a direct improvement through radius
+eight.  Any successful one-shot destroy-and-repair search must therefore
+destroy at least nine incumbent points; the next record-improvement decision
+is whether ten outsiders can be inserted after nine deletions.  In a global
+model seeking at least $165$ points, let $x_s$ indicate whether the record
+point $s$ is retained.  The same result gives the valid incumbent-overlap cut
+\[
+  \sum_{s\in S_{100}}x_s\le155.
+\]
+It excludes all $\sum_{r=0}^{8}\binom{164}{r}=11{,}494{,}182{,}836{,}236$
+deletion masks in the first nine shells before any repair variables are
+considered.  For
+$S_{64}$, the difference between $u$ and $e$ at radius seven shows that ranking
+a destroy set only by the number of individually unlocked points can be
+misleading: the best unlocked collection need not contain a compatible repair
+of the same size.
+
+These observations are algorithmic consequences, not evidence that the
+profiles predict heuristic performance in general.  Establishing such a link
+would require multiple nonisomorphic constructions, repeated solver runs, and
+an experimental protocol fixed before evaluating the outcomes.
+
+\section{Reproducibility and provenance}
+\label{sec:reproducibility}
+
+The accompanying research directory is intended to be the reproducibility
+package.  The key files are:
+\begin{itemize}[leftmargin=*]
+  \item \path{research/audit/AUDIT.md}, the independent radius-six audit;
+  \item \path{research/audit/proof_manifest.json} and
+  \path{research/audit/certificate_checksums.sha256}, recording the instance,
+  proof, tools, and hashes;
+  \item \path{research/audit/verify_certificate.sh}, the one-command replay of
+  checksums, matching witnesses, and DRAT verification;
+  \item \path{research/radius7_exchange_dfs.py} and
+  \path{research/radius7_pair_compatibility.py}, the exchange solver and pair
+  preprocessor;
+  \item \path{research/radius7_dfs_n100_r7_k5.txt} and
+  \path{research/radius7_dfs_n100_r7_k6.txt}, the radius-seven witness and
+  current upper-bound log;
+  \item \path{research/radius7_dfs_n64_r6_k5.txt},
+  \path{research/radius7_dfs_n64_r7_k5.txt}, and
+  \path{research/radius7_dfs_n64_r7_k6.txt}, the compatible $n=64$ logs;
+  \item \path{research/audit/radius7_pair_cache_audit.json}, the independent
+  pair-cache audit;
+  \item \path{research/audit/radius7_core_audit.json}, the independent core and
+  ternary-no-good regeneration;
+  \item \path{research/audit/radius7_core_r7_k6_nosym.cnf} and
+  \path{research/audit/radius7_core_r7_k6_nosym.drat}, the certified
+  radius-seven upper-bound instance and proof;
+  \item \path{research/radius8_cpp_antichain_dfs.cpp} and
+  \path{research/radius8_cpp_REPORT.md}, the radius-eight solver and detailed
+  computational report;
+  \item \path{research/radius8_cpp_n100_r8_k6.json},
+  \path{research/radius8_cpp_n100_r8_k6_verify.json}, and
+  \path{research/radius8_cpp_n100_r8_k7_relaxed_nocolor.json}, the positive
+  witness, direct check, and decisive relaxed upper-bound run;
+  \item \path{research/audit/radius8_cpp_inputs_independent.py},
+  \path{research/radius8_cpp_input_audit.json}, and
+  \path{research/audit/RADIUS8_CPP_AUDIT.md}, the independent radius-eight
+  input and implementation audits;
+  \item \path{research/audit/verify_radius8_computation.sh}, the one-command
+  checksum, witness, differential-test, rebuild, and decisive replay wrapper;
+  \item \path{research/RESULTS_MANIFEST.json} and
+  \path{research/audit/verify_frontier_bundle.sh}, the machine-readable
+  claim/evidence snapshot and its fast cross-check wrapper;
+  \item \path{research/RADIUS9_THEORY_NOTE.md}, the transition-barrier,
+  incumbent-cut, and local TAR-component deductions;
+  \item \path{research/audit/verify_tar_transition_theorem.py}, an exhaustive
+  finite-model regression over all hereditary families on ground sets of size
+  at most four (a check of edge cases, not a substitute for the proof);
+  \item \path{research/radius9_FRONTIER.md},
+  \path{research/radius9_cpp_n100_r9_k10.json}, and
+  \path{research/radius9_alt_search_20260827.json}, the explicitly
+  \textsc{unknown} radius-nine frontier and bounded-search diagnostics;
+  \item \path{research/radius9_u7_witness.json},
+  \path{research/radius9_u7_witness_verify.json}, and
+  \path{research/audit/radius9_mask_direct_check.py}, the radius-nine
+  individual-unlock witness and direct exact-integer checks.
+\end{itemize}
+
+From the repository root, the radius-six certificate and its matching
+witnesses are replayed by
+\begin{verbatim}
+research/audit/verify_certificate.sh
+\end{verbatim}
+The exact radius-seven DFS can be rerun, subject to the documented Python
+environment, by
+\begin{verbatim}
+python research/radius7_exchange_dfs.py \
+  --n 100 --radius 7 --target 6 \
+  --pair-cache research/radius7_paircompat_n100_r7.json \
+  --seconds 300 \
+  --output research/radius7_dfs_n100_r7_k6.replay.txt
+\end{verbatim}
+The independently checkable proof is replayed by
+\begin{verbatim}
+research/audit/tools/drat-trim/drat-trim \
+  research/audit/radius7_core_r7_k6_nosym.cnf \
+  research/audit/radius7_core_r7_k6_nosym.drat
+\end{verbatim}
+The required success line is \texttt{s VERIFIED}.  Replaying the DFS alone is
+not a certificate; replaying the DRAT checker verifies the archived CNF, while
+the reduction audit remains a separate part of the trust chain.
+
+The radius-eight checks and decisive replay are run together by
+\begin{verbatim}
+research/audit/verify_radius8_computation.sh
+\end{verbatim}
+Passing \texttt{--full-input-audit} additionally regenerates every candidate,
+cover, forced mask, and pair decision.  Equivalently, the decisive relaxation
+alone can be rebuilt and replayed by
+\begin{verbatim}
+g++ -O3 -DNDEBUG -std=c++20 \
+  -DR8CPP_RELAX_OUTSIDE_TRIPLES -DR8CPP_NO_COLOR_PRUNING \
+  research/radius8_cpp_antichain_dfs.cpp -o /tmp/r8-relaxed
+/tmp/r8-relaxed \
+  research/radius7_pair_input_n100_r8.bin \
+  research/radius7_paircompat_n100_r8.json \
+  7 600 /tmp/r8-k7-relaxed.json
+\end{verbatim}
+The expected status is \textsc{unsat} with exit code $20$.  This is a
+deterministic replay of the audited exhaustive program, not an independently
+checkable UNSAT certificate.
+
+The AlphaEvolve source was pinned at repository commit
+\path{8f447457957deac61e28bf1676746f0753b3b2f8}.  The source notebook has
+SHA-256
+\path{653accd24369672f1cc757b203dae311f1489895a1cb8e6242d3308fe657891d},
+and the canonical serialized $S_{100}$ coordinates have SHA-256
+\path{ffe9583db47dbcc7e29e12a7d148fb1388827ac9917d1aefa7eb5fee89b4e7d6}.
+The accompanying archive preserves the sources, environment specification,
+witnesses, CNFs, proofs, checkers, manifests, and manuscript under immutable
+hashes.
+
+\section{Limitations and open problems}
+
+The present study has several material limitations.
+\begin{enumerate}[leftmargin=*]
+  \item The exact values $u_{S_{100}}(7)$, $u_{S_{100}}(8)$, and both profiles
+  at radius nine are open.  A timeout or a failed heuristic search is neither
+  evidence of satisfiability nor a certified upper bound.
+  \item The upper bound $e_{S_{100}}(7)<6$ has a verified DRAT proof, but the
+  geometry-to-CNF reduction is audited software rather than an end-to-end
+  theorem in a proof assistant.  No full LRAT/CakeML check has been performed.
+  \item The upper bound $e_{S_{100}}(8)<7$ is an independently audited and
+  replayed exhaustive computation, but it has no DRAT/LRAT proof trace.  It
+  therefore retains the C++ implementation, compiler, and hardware as part of
+  its trust base.
+  \item Certification is uneven across the two tables.  The decisive
+  $S_{100}$ radius-six and radius-seven bounds have verified DRAT chains; other
+  upper-bound cells need similarly portable evidence.
+  \item The formulas $D^u_S$ and $D^e_S$ lower-bound a true TAR barrier but do
+  not generally determine it.  Computing exact max--min reconfiguration values
+  is a separate problem.
+  \item Two principal configurations are insufficient for a general empirical
+  law.  Profiles for all SAT-optimal small grids and for multiple
+  nonisomorphic large configurations would test whether rigidity correlates
+  with size or search difficulty.
+  \item No result here proves $C(64)=112$, $C(100)=164$, or any other global
+  optimum.  The asymptotic bound in \cite{croot2026largesieve} does not close
+  these finite cases.
+  \item The novelty statement is based on a targeted search of primary sources.
+  It should be checked against MathSciNet and zbMATH and discussed with domain
+  experts before asserting priority.
+\end{enumerate}
+
+Promising next questions include producing a portable proof trace for the
+radius-eight rejection, converting the existing proofs to LRAT, solving
+$u_{S_{100}}(7)$ and $u_{S_{100}}(8)$, profiling small globally optimal
+instances, comparing nonisomorphic sets of equal size, and deciding the next
+record frontier $e_{S_{100}}(9)\ge10$.  The radius-nine counters indicate that
+caching each complete deletion mask's unlocked-candidate bitset is a concrete
+next optimization: it can replace repeated minimal-cover scans by bitset
+intersections.  A more
+theoretical direction is to characterize hypergraph classes for which the
+profile-derived TAR bound is attained.
+
+\section*{Use of computational tools}
+
+Generative language-model tools, including OpenAI Codex, assisted computational
+exploration, code development, literature search, and drafting.  The human
+author is responsible for the manuscript, its claims, references, and
+accompanying artifacts.
+
+\section*{Acknowledgments}
+
+The public configurations studied here originate in the AlphaEvolve repository
+and associated paper \cite{georgiev2025exploration,alphaevolve59}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

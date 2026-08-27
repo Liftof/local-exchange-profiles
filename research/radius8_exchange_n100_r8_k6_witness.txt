@@ -1,0 +1,10 @@
+n=100
+record_size=164
+radius_removed=8
+target_added=6
+status=SAT
+removals=[(26, 59), (7, 48), (73, 59), (22, 4), (92, 48), (77, 4), (96, 2), (3, 2)]
+additions=[(4, 1), (10, 43), (22, 0), (77, 0), (89, 43), (95, 1)]
+final_size=162
+independent_geometry_verification=true
+note=Found by a deterministic-seed removal-mask hill climb; the final claim is checked directly by exact integer squared distances over every triple.

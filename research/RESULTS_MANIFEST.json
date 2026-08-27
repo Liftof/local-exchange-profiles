@@ -1,0 +1,84 @@
+{
+  "format": "local-exchange-results-manifest-v1",
+  "date_utc": "2026-08-27",
+  "publication_status": "working preprint; not peer reviewed; not externally submitted",
+  "problem": "isosceles-triangle-free subsets of integer grids, with collinear isosceles triples forbidden",
+  "core_results": {
+    "S100": {
+      "grid_n": 100,
+      "record_size": 164,
+      "exact_exchange_profile_r0_through_r8": [0, 0, 1, 1, 2, 3, 4, 5, 6],
+      "individual_unlock_profile_exact_r0_through_r6": [0, 0, 1, 1, 2, 3, 4],
+      "individual_unlock_lower_bounds_r7_through_r9": [5, 6, 7],
+      "distinct_equal_or_larger_minimum_removals": 9,
+      "distinct_equal_size_minimum_symmetric_difference": 18,
+      "strict_improvement_minimum_symmetric_difference": 19,
+      "tar_target": "any distinct feasible set of size at least 164",
+      "tar_forced_maximum_visited_size": 161,
+      "tar_163_component": "star K_1,164 consisting of S100 and its 164 single deletions",
+      "safe_overlap_cut_for_target_at_least_164_distinct": "sum_{s in S100} x_s <= 155",
+      "removal_masks_conceptually_excluded_by_cut": 11494182836236
+    },
+    "S64": {
+      "grid_n": 64,
+      "record_size": 112,
+      "exact_individual_unlock_profile_r0_through_r7": [0, 1, 2, 2, 4, 4, 5, 6],
+      "exact_exchange_profile_r0_through_r7": [0, 1, 2, 2, 4, 4, 5, 5],
+      "strict_improvement_minimum_symmetric_difference": 17,
+      "tar_improvement_forced_maximum_visited_size": 109
+    },
+    "general_theorem": {
+      "name": "deletion-transition TAR barrier",
+      "formula_u": "D_u(S,R)=max(0,max_{0<=r<R}(r+1-u_S(r)))",
+      "formula_e": "D_e(S,R)=max(0,max_{0<=r<R}(r+1-e_S(r)))",
+      "conclusion": "every TAR path from S to a target deleting at least R elements of S visits size at most |S|-D",
+      "finite_model_regression": {
+        "maximum_ground_set_size": 4,
+        "hereditary_families": 197,
+        "base_sets": 1439,
+        "assertions": 44056
+      }
+    }
+  },
+  "evidence_levels": {
+    "radius_6": "CNF and DRAT proof independently regenerated and verified",
+    "radius_7": "direct witness plus independent core CNF and verified DRAT proof",
+    "radius_8": "direct witness plus exhaustive C++ computation independently audited and replayed; no DRAT or LRAT trace",
+    "theorem": "human-readable proof plus exhaustive small finite-model regression"
+  },
+  "radius_9_frontier": {
+    "improvement_decision": "e_S100(9) >= 10",
+    "status": "UNKNOWN",
+    "exact_bounded_search_seconds": 580.099,
+    "exact_nodes": 233472,
+    "exact_cover_tests": 91148661627,
+    "heuristic_masks_evaluated": 8446705,
+    "record_165_found": false,
+    "verified_result": "u_S100(9) >= 7",
+    "representative_obstruction": "seven unlocked outsiders are pairwise compatible, but (4,98),(75,81),(77,99) form an all-outsider isosceles triple; the maximum compatible subset of this list is six",
+    "warning": "UNKNOWN and heuristic NOT_FOUND are not upper bounds and do not establish nonexistence"
+  },
+  "artifact_sha256": {
+    "paper/main.tex": "a976d0d56b3a5d78aea55f35705e52797a2d055accb7f0d8687ed780d0961652",
+    "paper/references.bib": "5d9ca6aaabe52041a38b4fe56112fdc4019c1a3ec51e14d95e645f2248fc8da2",
+    "paper/main.pdf": "66dd14885f292ee22c154f0431cd0d08dc9c507555c43c110dbda463ab83ee23",
+    "research/radius8_cpp_antichain_dfs.cpp": "3829813c9faef533fc13c97c0a48323e6a686fa9802250b5aa6ba8b5102900d6",
+    "research/radius7_pair_input_n100_r8.bin": "31d4606f6f878ce6ddf4fc9cb48fbaeecd4380b11b478c456ec5ea2e040f295e",
+    "research/radius7_paircompat_n100_r8.json": "30e257b34af3a05a193023e3005fd46a933794fcd4ce429812b540724fe784d7",
+    "research/radius9_cpp_n100_r9_k10.json": "26edaed143ff2f3426ae5a92f87c766b5cb7aae92044b84aa20c85b92e5a0bf8",
+    "research/radius9_u7_witness.json": "ca463e0c546b2a472bb375964d657af5c2c7461a9ebe89aefa5edd08ec9a4d51",
+    "research/radius9_u7_witness_verify.json": "29b3f95ebb30d761146ae98385189f9de4d693a6fcbe238c97420c8a13036aa4",
+    "research/radius9_alt_search_20260827.json": "9eca88c648b83cd1b48984ee97fd3c0871051fef8a6e3977e2be1164d9e28b4c",
+    "research/audit/verify_tar_transition_theorem.py": "180ece31237baad51648652610190e0b46e3ef295cc58e4e7f706e6a97088eb2",
+    "research/audit/verify_frontier_bundle.sh": "45a96affa3a7e5b3cac715136e7627f91a9840ceae553e6680ceade2cca25bf2",
+    "research/audit/radius9_mask_direct_check.py": "40239d5cd8ce18fa223f61844fdb28b88913c4c213b068e32ef3c96b100d5145",
+    "research/RADIUS9_THEORY_NOTE.md": "b6228905c7570af39359aae6ab42fb040b74219e0416f28158f8e04073f54485"
+  },
+  "prohibited_inferences": [
+    "C(100)=164",
+    "global optimality of either public construction",
+    "nonexistence of a 165-point construction",
+    "e_S100(9)<10",
+    "formal end-to-end verification of the radius-eight computation"
+  ]
+}

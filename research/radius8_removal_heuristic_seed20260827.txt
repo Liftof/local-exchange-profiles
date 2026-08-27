@@ -1,0 +1,12 @@
+status=NOT_FOUND
+exact=False
+n=100
+radius=8
+target_added=9
+seed=20260827
+elapsed_seconds=180.000000
+iterations=76393
+restarts=2
+best_unlocked_count=6
+removals=[(92, 15), (26, 59), (7, 48), (73, 59), (22, 4), (92, 48), (96, 2), (3, 2)]
+unlocked=[(4, 1), (10, 43), (22, 0), (24, 18), (89, 43), (95, 1)]

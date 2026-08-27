@@ -1,0 +1,8 @@
+/SHA256SUMS
+/research/audit/r6_t5_matching.drat
+*.aux
+*.blg
+*.log
+*.out
+__pycache__/
+.venv/

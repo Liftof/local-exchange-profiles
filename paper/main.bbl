@@ -1,0 +1,110 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{GGSTW25}
+
+\bibitem[BMP21]{bulteau2021parametrization}
+Laurent Bulteau, Bertrand Marchand, and Yann Ponty.
+\newblock A new parametrization for independent set reconfiguration and
+  applications to {RNA} kinetics.
+\newblock In {\em 16th International Symposium on Parameterized and Exact
+  Computation (IPEC 2021)}. Schloss Dagstuhl -- Leibniz-Zentrum f\"{u}r
+  Informatik, 2021.
+\newblock \url{https://doi.org/10.4230/LIPIcs.IPEC.2021.11}.
+
+\bibitem[CEWW24]{charton2024patternboost}
+Fran\c{c}ois Charton, Jordan~S. Ellenberg, Adam~Zsolt Wagner, and Geordie
+  Williamson.
+\newblock {PatternBoost}: Constructions in mathematics with a little help from
+  {AI}, 2024.
+\newblock \url{https://arxiv.org/abs/2411.00566}.
+
+\bibitem[CFHH{\etalchar{+}}17]{cruzfilipe2017rat}
+Lu\'{i}s Cruz-Filipe, Marijn Heule, Warren Hunt, Matt Kaufmann, and Peter
+  Schneider-Kamp.
+\newblock Efficient certified {RAT} verification.
+\newblock In {\em Automated Deduction -- CADE 26}, volume 10395 of {\em Lecture
+  Notes in Computer Science}. Springer, 2017.
+\newblock \url{https://doi.org/10.1007/978-3-319-63046-5_14}.
+
+\bibitem[CMP{\etalchar{+}}26]{croot2026largesieve}
+Ernie Croot, Junzhe Mao, Cosmin Pohoata, Adam Sheffer, and Chi~Hoi Yip.
+\newblock A combinatorial large sieve for {Sidon} sets, distances, and norm
+  forms, 2026.
+\newblock Version 2; \url{https://arxiv.org/abs/2606.17487}.
+
+\bibitem[dBJM16]{deberg2016thresholds}
+Mark de~Berg, Bart M.~P. Jansen, and Debankur Mukherjee.
+\newblock Independent-set reconfiguration thresholds of hereditary graph
+  classes.
+\newblock In {\em 36th IARCS Annual Conference on Foundations of Software
+  Technology and Theoretical Computer Science (FSTTCS 2016)}. Schloss Dagstuhl
+  -- Leibniz-Zentrum f\"{u}r Informatik, 2016.
+\newblock \url{https://doi.org/10.4230/LIPIcs.FSTTCS.2016.34}.
+
+\bibitem[GGSTW25]{georgiev2025exploration}
+Bogdan Georgiev, Javier G\'{o}mez-Serrano, Terence Tao, and Adam~Zsolt Wagner.
+\newblock Mathematical exploration and discovery at scale, 2025.
+\newblock Version 3; \url{https://arxiv.org/abs/2511.02864}.
+
+\bibitem[GHKM26]{ganian2026framework}
+Robert Ganian, Hung~P. Hoang, Christian Komusiewicz, and Nils Morawietz.
+\newblock A parameterized-complexity framework for finding local optima.
+\newblock In {\em 17th Innovations in Theoretical Computer Science Conference
+  (ITCS 2026)}. Schloss Dagstuhl -- Leibniz-Zentrum f\"{u}r Informatik, 2026.
+\newblock \url{https://doi.org/10.4230/LIPIcs.ITCS.2026.66}.
+
+\bibitem[{Goo}]{alphaevolve59}
+{Google DeepMind}.
+\newblock Alphaevolve repository of problems: Problem 59, subsets of the grid
+  with no isosceles triangles.
+\newblock Official problem page and source repository.
+\newblock Accessed 27 August 2026;
+  \url{https://google-deepmind.github.io/alphaevolve_repository_of_problems/problems/59.html}.
+
+\bibitem[HKM16]{heule2016pythagorean}
+Marijn J.~H. Heule, Oliver Kullmann, and Victor~W. Marek.
+\newblock Solving and verifying the boolean pythagorean triples problem via
+  cube-and-conquer.
+\newblock In {\em Theory and Applications of Satisfiability Testing -- SAT
+  2016}, volume 9710 of {\em Lecture Notes in Computer Science}, pages
+  228--245. Springer, 2016.
+\newblock \url{https://doi.org/10.1007/978-3-319-40970-2_15}.
+
+\bibitem[HOST26]{hoang2026maxmin}
+Hung~P. Hoang, Naoto Ohsaka, Rin Saito, and Yuma Tamura.
+\newblock On (in)approximability of {MaxMin} independent set reconfiguration.
+\newblock In {\em 53rd International Colloquium on Automata, Languages, and
+  Programming (ICALP 2026)}, volume 374 of {\em Leibniz International
+  Proceedings in Informatics}, pages 108:1--108:16. Schloss Dagstuhl --
+  Leibniz-Zentrum f\"{u}r Informatik, 2026.
+\newblock \url{https://doi.org/10.4230/LIPIcs.ICALP.2026.108}.
+
+\bibitem[HT16]{hancock2016solutionfree}
+Robert Hancock and Andrew Treglown.
+\newblock On solution-free sets of integers {II}, 2016.
+\newblock \url{https://arxiv.org/abs/1611.08498}.
+
+\bibitem[KM25]{komusiewicz2025local}
+Christian Komusiewicz and Nils Morawietz.
+\newblock Can local optimality be used for efficient data reduction?
+\newblock {\em Theory of Computing Systems}, 69, 2025.
+\newblock \url{https://doi.org/10.1007/s00224-024-10205-8}.
+
+\bibitem[Sze26]{szeider2026lratcatcher}
+Stefan Szeider.
+\newblock {LRAT-Catcher}: Importing {SAT} solver certificates into {Lean 4} by
+  reflection, 2026.
+\newblock \url{https://arxiv.org/abs/2607.00815}.
+
+\bibitem[Wu16]{wu2016counting}
+Chai~Wah Wu.
+\newblock Counting the number of isosceles triangles in rectangular regular
+  grids, 2016.
+\newblock \url{https://arxiv.org/abs/1605.00180}.
+
+\bibitem[ZZWK26]{zhang2026geometry}
+Luoning Zhang, Xu~Zhuang, Tianhao Wang, and Nathan Kaplan.
+\newblock Geometry-aware {MCTS} for extremal problems in combinatorial
+  geometry, 2026.
+\newblock \url{https://arxiv.org/abs/2606.26399}.
+
+\end{thebibliography}
