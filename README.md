@@ -30,6 +30,11 @@ attached to the corresponding GitHub release. Start with `research/README.md`
 and `paper/main.pdf`. SHA-256 identities and one-command replay instructions
 are included in the artifact.
 
+Original code is licensed under Apache-2.0. The manuscript, original
+documentation, generated data, CNF instances, result logs, and proof artifacts
+are licensed under CC-BY-4.0. See `LICENSE_SCOPE.md` and
+`THIRD_PARTY_NOTICES.md` for scope and provenance.
+
 ## Citation
 
 ```text

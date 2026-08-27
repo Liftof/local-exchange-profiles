@@ -59,9 +59,9 @@
     "warning": "UNKNOWN and heuristic NOT_FOUND are not upper bounds and do not establish nonexistence"
   },
   "artifact_sha256": {
-    "paper/main.tex": "a976d0d56b3a5d78aea55f35705e52797a2d055accb7f0d8687ed780d0961652",
+    "paper/main.tex": "f8e133a60b0bc781fda902cd32d647e3de6410605b895dc840e5a7db6664075d",
     "paper/references.bib": "5d9ca6aaabe52041a38b4fe56112fdc4019c1a3ec51e14d95e645f2248fc8da2",
-    "paper/main.pdf": "66dd14885f292ee22c154f0431cd0d08dc9c507555c43c110dbda463ab83ee23",
+    "paper/main.pdf": "4a99b1bc6f88a55d613ad250a50547fa14e26d90368233f420ba8176bbda898a",
     "research/radius8_cpp_antichain_dfs.cpp": "3829813c9faef533fc13c97c0a48323e6a686fa9802250b5aa6ba8b5102900d6",
     "research/radius7_pair_input_n100_r8.bin": "31d4606f6f878ce6ddf4fc9cb48fbaeecd4380b11b478c456ec5ea2e040f295e",
     "research/radius7_paircompat_n100_r8.json": "30e257b34af3a05a193023e3005fd46a933794fcd4ce429812b540724fe784d7",

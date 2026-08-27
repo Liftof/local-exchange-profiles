@@ -1,7 +1,7 @@
 # Third-party material and provenance
 
-This inventory is a publication preflight aid, not legal advice and not a
-license for the new material in this workspace.
+This inventory records provenance and third-party licensing. It is not legal
+advice. The licenses for new material are described in `LICENSE_SCOPE.md`.
 
 ## AlphaEvolve problem repository
 
@@ -35,6 +35,7 @@ notice files.
 
 ## New work
 
-No license has yet been selected for the new manuscript, scripts, generated
-CNFs, proof traces, or metadata. That choice is reserved for the human rights
-holder and is a mandatory publication gate.
+Original source code is released under Apache-2.0. The manuscript, original
+documentation, generated data, result logs, CNF instances, and proof artifacts
+are released under CC-BY-4.0. See `LICENSE_SCOPE.md`, `LICENSE`, and
+`LICENSE-CC-BY-4.0` for the exact scope and terms.
